@@ -13,12 +13,8 @@
     <span>{{name}}</span>
     {{/each}}
 
-    {{#each checkins}}
-      <div>
-        <span>{{created}}</span>
-        <span>{{team.name}}</span>
-	<span>{{description}}</span>
-      </div>
+    {{#each days}}
+      {{> day}}
     {{/each}}
 
   <div>
@@ -33,4 +29,25 @@
       <input type="button" id="addNewCheckin" value="Add"/>
     </span>
   </div>
+</template>
+
+<template name="day">
+  <div>
+    <span>
+      {{ displayString }}
+    </span>
+    {{#each team_days }}
+    <span>
+	{{> team_day}}
+    </div>
+    {{/each}}
+  </div>
+</template>
+
+<template name="team_day">
+  {{#each checkins}}
+    <div>
+      {{description}}
+    </div>
+  {{/each}}
 </template>

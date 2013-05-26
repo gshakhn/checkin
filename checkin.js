@@ -10,17 +10,43 @@ if (Meteor.isClient) {
     return Checkins.find();
   };
 
+  Template.main.days = function() {
+    return _.uniq(Checkins.find().map(function(checkin) {
+      return checkin.created_day;
+    })).map(function(formattedDate) {
+      return new Date(formattedDate);
+    });
+  };
+
   Template.main.events({
     'click #addNewCheckin': function() {
       var team = Teams.findOne($('#team').val());
       var description = $('#text').val();
-      Checkins.insert({
+      var created_date = new Date();
+      var abc = Checkins.insert({
 	team: team,
 	description: description,
-	created: new Date().getTime()
+	created_date: created_date.toISOString(),
+	created_day: getDay(created_date).toISOString()
       });
+      console.log(Checkins.findOne(abc));
     }
   });
+
+  Template.day.displayString = function() {
+    return this.toLocaleDateString();
+  };
+
+  Template.day.team_days = function() {
+    var day = this;
+    return Teams.find().map(function(team) {
+      return {team: team, day: day};
+    });
+  };
+
+  Template.team_day.checkins = function() {
+    return Checkins.find({team: this.team});
+  };
 }
 
 if (Meteor.isServer) {
@@ -30,4 +56,8 @@ if (Meteor.isServer) {
       Teams.insert({name: "Team 2"});
     }
   });
+}
+
+function getDay(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
