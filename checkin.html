@@ -3,11 +3,34 @@
 </head>
 
 <body>
-  {{> hello}}
+  {{> main}}
 </body>
 
-<template name="hello">
-  <h1>Hello World!</h1>
-  {{greeting}}
-  <input type="button" value="Click" />
+<template name="main">
+  <div>
+    <span>Team:</span>
+    {{#each teams}}
+    <span>{{name}}</span>
+    {{/each}}
+
+    {{#each checkins}}
+      <div>
+        <span>{{created}}</span>
+        <span>{{team.name}}</span>
+	<span>{{description}}</span>
+      </div>
+    {{/each}}
+
+  <div>
+    <span>Insert a checkin:</span>
+    <span>
+      <select id="team">
+	{{#each teams}}
+	  <option value="{{_id}}">{{name}}</option>
+        {{/each}}
+      </select>
+      <textarea id="text"/>
+      <input type="button" id="addNewCheckin" value="Add"/>
+    </span>
+  </div>
 </template>

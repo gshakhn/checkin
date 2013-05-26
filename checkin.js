@@ -1,19 +1,33 @@
+Teams = new Meteor.Collection("teams")
+Checkins = new Meteor.Collection("checkins")
+
 if (Meteor.isClient) {
-  Template.hello.greeting = function () {
-    return "Welcome to checkin.";
+  Template.main.teams = function() {
+    return Teams.find();
   };
 
-  Template.hello.events({
-    'click input' : function () {
-      // template data, if any, is available in 'this'
-      if (typeof console !== 'undefined')
-        console.log("You pressed the button");
+  Template.main.checkins = function() {
+    return Checkins.find();
+  };
+
+  Template.main.events({
+    'click #addNewCheckin': function() {
+      var team = Teams.findOne($('#team').val());
+      var description = $('#text').val();
+      Checkins.insert({
+	team: team,
+	description: description,
+	created: new Date().getTime()
+      });
     }
   });
 }
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    // code to run on server at startup
+    if (Teams.find().count() === 0) {
+      Teams.insert({name: "Team 1"});
+      Teams.insert({name: "Team 2"});
+    }
   });
 }
