@@ -12,7 +12,7 @@ if (Meteor.isClient) {
 
   Template.main.days = function() {
     return _.uniq(Checkins.find().map(function(checkin) {
-      return checkin.created_day;
+      return checkin.day;
     })).map(function(formattedDate) {
       return new Date(formattedDate);
     });
@@ -30,8 +30,8 @@ if (Meteor.isClient) {
       var abc = Checkins.insert({
 	team: team,
 	description: description,
-	created_date: created_date.toISOString(),
-	created_day: getDay(created_date).toISOString()
+	day: getDay(created_date).toISOString(),
+	created_date: created_date.toISOString()
       });
       $('#text').val('');
       Session.set('preview', '');
