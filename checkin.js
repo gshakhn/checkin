@@ -24,11 +24,11 @@ if (Meteor.isClient) {
 
   Template.main.events({
     'click #add-new-checkin': function() {
-      var team = Teams.findOne($('#team').val());
+      var teamId = $('#team').val();
       var description = $('#text').val();
       var createdDate = new Date();
       var abc = Checkins.insert({
-	team: team,
+	teamId: teamId,
 	description: description,
 	day: getDay(createdDate).toISOString(),
 	createdDate: createdDate.toISOString()
@@ -55,7 +55,7 @@ if (Meteor.isClient) {
   };
 
   Template.teamDay.checkins = function() {
-    return Checkins.find({team: this.team});
+    return Checkins.find({teamId: this.team._id});
   };
 }
 
@@ -65,6 +65,19 @@ if (Meteor.isServer) {
       if (Teams.findOne({name: team.name}) === undefined) {
 	console.log("Adding team " + team.name);
 	Teams.insert({name: team.name});
+      }
+    });
+
+    Meteor.settings.checkins.forEach(function(checkinData) {
+      var team = Teams.findOne({name: checkinData.teamName});
+      if (Checkins.findOne({day: checkinData.day, teamId: team._id, description: checkinData.description}) === undefined) {
+	console.log("Adding checkin for team " + team.name + " on " + (new Date(checkinData.day)).toLocaleDateString());
+        Checkins.insert({
+	  teamId: team._id,
+	  description: checkinData.description,
+	  day: checkinData.day,
+	  createdDate: (new Date()).toISOString()
+	});
       }
     });
   });

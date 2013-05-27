@@ -1,0 +1,22 @@
+{
+  "teams": [
+    { "name": "Team 1" },
+    { "name": "Team 2" },
+    { "name": "Team 3" },
+    { "name": "Team 4" }
+  ],
+  "checkins": [
+    { "teamName": "Team 3",
+      "day": "2013-05-26T05:00:00.000Z",
+      "description": "Team 3 did some stuff on the 26th" },
+    { "teamName": "Team 1",
+      "day": "2013-05-27T05:00:00.000Z",
+      "description": "We did some stuff." },
+    { "teamName": "Team 1",
+      "day": "2013-05-27T05:00:00.000Z",
+      "description": "We did some more stuff" },
+    { "teamName": "Team 2",
+      "day": "2013-05-27T05:00:00.000Z",
+      "description": "We did stuff too." }
+  ]
+}
