@@ -9,13 +9,22 @@
 <template name="main">
   <table class="outer">
     <thead>
-      <tr>
-        <td>Team:</td>
+      <tr class="day-row">
+        <td></td>
         {{#each teams}}
 	<td class="team-name">{{name}}</td>
         {{/each}}
       </tr>
     </thead>
+
+    <tr class"latest-row">
+      <td class="day-label">
+	Latest
+      </td>
+      {{#each teams}}
+        {{> teamLatest}}
+      {{/each}}
+    </tr>
 
     {{#each days}}
       {{> day}}
@@ -63,5 +72,13 @@
       {{#markdown}}{{description}}{{/markdown}}
       </div>
     {{/each}}
+  </td>
+</template>
+
+<template name="teamLatest">
+  <td class="team-day">
+    <div class="checkin">
+      {{#markdown}}{{checkin.description}}{{/markdown}}
+    </div>
   </td>
 </template>

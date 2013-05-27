@@ -59,6 +59,12 @@ if (Meteor.isClient) {
 	{teamId: this.team._id, day: this.day.toISOString()},
 	{sort: [["createdDate", "desc"]]});
   };
+
+  Template.teamLatest.checkin = function() {
+    return Checkins.findOne(
+	{teamId: this._id},
+	{sort: [["day", "desc"], ["createdDate", "desc"]]});
+  }
 }
 
 if (Meteor.isServer) {
