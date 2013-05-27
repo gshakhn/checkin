@@ -17,6 +17,9 @@
       "description": "We did some more stuff" },
     { "teamName": "Team 2",
       "day": "2013-05-27T05:00:00.000Z",
-      "description": "We did stuff too." }
+      "description": "We did stuff too." },
+    { "teamName": "Team 1",
+      "day": "2013-05-28T05:00:00.000Z",
+      "description": "And we did stuff on the 28th" }
   ]
 }
