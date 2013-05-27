@@ -55,7 +55,7 @@ if (Meteor.isClient) {
   };
 
   Template.teamDay.checkins = function() {
-    return Checkins.find({teamId: this.team._id});
+    return Checkins.find({teamId: this.team._id, day: this.day.toISOString()});
   };
 }
 
