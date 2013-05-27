@@ -10,24 +10,17 @@ if Meteor.isClient
     days = Template.main.checkins().map (checkin) -> checkin.day
     _.uniq(days).sort().reverse().map (day) -> new Date(day)
 
-  Template.main.preview = -> Session.get('preview')
-
   Template.main.columnWidth = -> 100 / (Template.main.teams().count())
 
-  Template.main.events =
-    'click #add-new-checkin': ->
-      teamId = $('#team').val()
-      description = $('#text').val()
-      createdDate = new Date()
-      Checkins.insert
-        teamId: teamId
-        description: description
-        day: new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate()).toISOString()
-        createdDate: createdDate.toISOString()
-      $('#text').val('')
-      Session.set('preview', '')
+  Template.teamHeader.edit = -> Session.equals('adding', @_id)
 
-    'keyup #text': -> Session.set('preview', $('#text').val())
+  Template.teamHeader.events =
+    'click .add-checkin': ->
+      Session.set('adding', @_id)
+
+    'click .cancel-checkin': ->
+      Session.set('preview', '')
+      Session.set('adding', null)
 
   Template.day.displayString = -> @toLocaleDateString()
 
@@ -50,6 +43,29 @@ if Meteor.isClient
     {sort: [
       ['day', 'desc']
       ['createdDate', 'desc']]})
+
+  Template.teamLatest.edit = -> Session.equals('adding', @_id)
+
+  Template.teamLatest.preview = -> Session.get('preview')
+
+  Template.teamLatest.events =
+    'click #save-new-checkin': ->
+      description = $('#text').val()
+      createdDate = new Date()
+      Checkins.insert
+        teamId: @_id
+        description: description
+        day: new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate()).toISOString()
+        createdDate: createdDate.toISOString()
+      $('#text').val('')
+      Session.set('preview', '')
+      Session.set('adding', null)
+
+    'click #cancel-new-checkin': ->
+      Session.set('preview', '')
+      Session.set('adding', null)
+
+    'keyup #text': -> Session.set('preview', $('#text').val())
 
 if Meteor.isServer
   Meteor.startup ->

@@ -11,8 +11,8 @@
     <thead>
       <tr class="day-row">
         <td></td>
-        {{#each teams}}
-	<td class="team-name" style="width:{{columnWidth}}%">{{name}}</td>
+	{{#each teams}}
+	  <td class="team-name" style="width:{{columnWidth}}%">{{> teamHeader}}</td>
         {{/each}}
       </tr>
     </thead>
@@ -30,28 +30,15 @@
       {{> day}}
     {{/each}}
   </table>
+</template>
 
-  <div>
-    <div>Insert a checkin:</div>
-    <div>
-      <select id="team">
-	{{#each teams}}
-	  <option value="{{_id}}">{{name}}</option>
-        {{/each}}
-      </select>
-    </div>
-    <div>
-      <span>
-	<textarea id="text" cols="50" rows="5"/>
-     </span>
-     <span class="preview" style="width:{{columnWidth}}%">
-       {{#markdown}}{{preview}}{{/markdown}}
-     </span>
-    </div>
-    <div>
-      <input type="button" id="add-new-checkin" value="Add"/>
-    </div>
-  </div>
+<template name="teamHeader">
+  {{name}}
+  {{#unless edit}}
+    <a class="add-checkin">+</a>
+  {{else}}
+    <a class="cancel-checkin">-</a>
+  {{/unless}}
 </template>
 
 <template name="day">
@@ -78,7 +65,20 @@
 <template name="teamLatest">
   <td class="team-day">
     <div class="checkin">
-      {{#markdown}}{{checkin.description}}{{/markdown}}
+      {{#if edit}}
+        <div>
+	  <textarea id="text"/>
+	</div>
+        <div class="preview">
+          {{#markdown}}{{preview}}{{/markdown}}
+        </div>
+        <div>
+          <input type="button" id="save-new-checkin" value="Add"/>
+          <input type="button" id="cancel-new-checkin" value="Cancel"/>
+	</div>
+      {{else}}
+        {{#markdown}}{{checkin.description}}{{/markdown}}
+      {{/if}}
     </div>
   </td>
 </template>
