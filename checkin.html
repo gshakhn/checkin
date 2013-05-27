@@ -7,15 +7,20 @@
 </body>
 
 <template name="main">
-  <div>
-    <span>Team:</span>
-    {{#each teams}}
-    <span>{{name}}</span>
-    {{/each}}
+<table class="outer">
+    <thead>
+      <tr>
+        <td>Team:</td>
+        {{#each teams}}
+	<td class="team-name">{{name}}</td>
+        {{/each}}
+      </tr>
+    </thead>
 
     {{#each days}}
       {{> day}}
     {{/each}}
+  </table>
 
   <div>
     <span>Insert a checkin:</span>
@@ -26,28 +31,28 @@
         {{/each}}
       </select>
       <textarea id="text"/>
-      <input type="button" id="addNewCheckin" value="Add"/>
+      <input type="button" id="add-new-checkin" value="Add"/>
     </span>
   </div>
 </template>
 
 <template name="day">
-  <div>
-    <span>
+  <tr class="day-row">
+    <td class="day-label">
       {{ displayString }}
-    </span>
+    </td>
     {{#each team_days }}
-    <span>
 	{{> team_day}}
-    </div>
     {{/each}}
-  </div>
+  </tr>
 </template>
 
 <template name="team_day">
-  {{#each checkins}}
-    <div>
-      {{description}}
-    </div>
-  {{/each}}
+  <td class="team-day">
+    {{#each checkins}}
+      <div class="checkin">
+        {{description}}
+      </div>
+    {{/each}}
+  </td>
 </template>

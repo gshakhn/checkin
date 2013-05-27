@@ -19,7 +19,7 @@ if (Meteor.isClient) {
   };
 
   Template.main.events({
-    'click #addNewCheckin': function() {
+    'click #add-new-checkin': function() {
       var team = Teams.findOne($('#team').val());
       var description = $('#text').val();
       var created_date = new Date();
