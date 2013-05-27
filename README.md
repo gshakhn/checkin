@@ -14,6 +14,6 @@ Configure the teams you need by copying `data.json.template` to `data.json` and 
 
 Once the teams are setup, you can run the app by doing:
 
-    meteor run --settings data.json.template
+    meteor run --settings data.json
     
 You can connect to the app at localhost:3000.
