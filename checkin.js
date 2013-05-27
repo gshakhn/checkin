@@ -23,7 +23,7 @@ if (Meteor.isClient) {
   };
 
   Template.main.columnWidth = function() {
-    return 100 / (Template.main.teams().count() + 1)
+    return 100 / (Template.main.teams().count())
   }
 
   Template.main.events({
