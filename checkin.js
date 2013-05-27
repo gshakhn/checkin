@@ -13,7 +13,7 @@ if (Meteor.isClient) {
   Template.main.days = function() {
     return _.uniq(Checkins.find().map(function(checkin) {
       return checkin.day;
-    })).map(function(formattedDate) {
+    })).sort().reverse().map(function(formattedDate) {
       return new Date(formattedDate);
     });
   };
