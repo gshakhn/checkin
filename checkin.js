@@ -61,10 +61,12 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    if (Teams.find().count() === 0) {
-      Teams.insert({name: "Team 1"});
-      Teams.insert({name: "Team 2"});
-    }
+    Meteor.settings.teams.forEach(function(team) {
+      if (Teams.findOne({name: team.name}) === undefined) {
+	console.log("Adding team " + team.name);
+	Teams.insert({name: team.name});
+      }
+    });
   });
 }
 
