@@ -30,3 +30,26 @@ if root.Meteor.isClient
       root.Session.set('preview', '')
 
     'keyup #text': -> root.Session.set('preview', $('#text').val())
+
+  root.Template.day.displayString = -> @toLocaleDateString()
+
+  root.Template.day.teamDays = -> root.Template.main.teams()
+      .map (team) =>
+        team: team
+        day: @
+
+  root.Template.teamDay.checkins = -> root.Checkins.find(
+    {
+      teamId: @team._id
+      day: @day.toISOString()
+    },
+    {
+      sort: [['createdDate', 'desc']]
+    })
+
+  root.Template.teamLatest.checkin = -> root.Checkins.findOne(
+    {teamId: @_id},
+    {sort: [
+      ['day', 'desc']
+      ['createdDate', 'desc']]})
+      

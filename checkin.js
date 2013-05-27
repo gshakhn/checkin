@@ -1,28 +1,3 @@
-if (Meteor.isClient) {
-  Template.day.displayString = function() {
-    return this.toLocaleDateString();
-  };
-
-  Template.day.teamDays = function() {
-    var day = this;
-    return Teams.find().map(function(team) {
-      return {team: team, day: day};
-    });
-  };
-
-  Template.teamDay.checkins = function() {
-    return Checkins.find(
-	{teamId: this.team._id, day: this.day.toISOString()},
-	{sort: [["createdDate", "desc"]]});
-  };
-
-  Template.teamLatest.checkin = function() {
-    return Checkins.findOne(
-	{teamId: this._id},
-	{sort: [["day", "desc"], ["createdDate", "desc"]]});
-  }
-}
-
 if (Meteor.isServer) {
   Meteor.startup(function () {
     Meteor.settings.teams.forEach(function(team) {
@@ -47,8 +22,4 @@ if (Meteor.isServer) {
       });
     }
   });
-}
-
-function getDay(date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
