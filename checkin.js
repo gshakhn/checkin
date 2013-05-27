@@ -22,6 +22,10 @@ if (Meteor.isClient) {
     return Session.get('preview');
   };
 
+  Template.main.columnWidth = function() {
+    return 100 / (Template.main.teams().count() + 1)
+  }
+
   Template.main.events({
     'click #add-new-checkin': function() {
       var teamId = $('#team').val();

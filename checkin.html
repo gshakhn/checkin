@@ -12,7 +12,7 @@
       <tr class="day-row">
         <td></td>
         {{#each teams}}
-	<td class="team-name">{{name}}</td>
+	<td class="team-name" style="width:{{columnWidth}}%">{{name}}</td>
         {{/each}}
       </tr>
     </thead>
@@ -44,7 +44,7 @@
       <span>
 	<textarea id="text" cols="50" rows="5"/>
      </span>
-     <span class="preview">
+     <span class="preview" style="width:{{columnWidth}}%">
        {{#markdown}}{{preview}}{{/markdown}}
      </span>
     </div>
