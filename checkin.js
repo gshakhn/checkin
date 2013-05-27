@@ -26,12 +26,12 @@ if (Meteor.isClient) {
     'click #add-new-checkin': function() {
       var team = Teams.findOne($('#team').val());
       var description = $('#text').val();
-      var created_date = new Date();
+      var createdDate = new Date();
       var abc = Checkins.insert({
 	team: team,
 	description: description,
-	day: getDay(created_date).toISOString(),
-	created_date: created_date.toISOString()
+	day: getDay(createdDate).toISOString(),
+	createdDate: createdDate.toISOString()
       });
       $('#text').val('');
       Session.set('preview', '');
@@ -47,14 +47,14 @@ if (Meteor.isClient) {
     return this.toLocaleDateString();
   };
 
-  Template.day.team_days = function() {
+  Template.day.teamDays = function() {
     var day = this;
     return Teams.find().map(function(team) {
       return {team: team, day: day};
     });
   };
 
-  Template.team_day.checkins = function() {
+  Template.teamDay.checkins = function() {
     return Checkins.find({team: this.team});
   };
 }

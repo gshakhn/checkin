@@ -50,13 +50,13 @@
     <td class="day-label">
       {{ displayString }}
     </td>
-    {{#each team_days }}
-	{{> team_day}}
+    {{#each teamDays }}
+	{{> teamDay}}
     {{/each}}
   </tr>
 </template>
 
-<template name="team_day">
+<template name="teamDay">
   <td class="team-day">
     {{#each checkins}}
     <div class="checkin">
