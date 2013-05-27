@@ -50,8 +50,8 @@
 <template name="team_day">
   <td class="team-day">
     {{#each checkins}}
-      <div class="checkin">
-        {{description}}
+    <div class="checkin">
+      {{#markdown}}{{description}}{{/markdown}}
       </div>
     {{/each}}
   </td>
