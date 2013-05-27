@@ -18,6 +18,10 @@ if (Meteor.isClient) {
     });
   };
 
+  Template.main.preview = function() {
+    return Session.get('preview');
+  };
+
   Template.main.events({
     'click #add-new-checkin': function() {
       var team = Teams.findOne($('#team').val());
@@ -29,7 +33,13 @@ if (Meteor.isClient) {
 	created_date: created_date.toISOString(),
 	created_day: getDay(created_date).toISOString()
       });
+      $('#text').val('');
+      Session.set('preview', '');
       console.log(Checkins.findOne(abc));
+    },
+
+    'keyup #text': function() {
+      Session.set('preview', $('#text').val());
     }
   });
 

@@ -7,7 +7,7 @@
 </body>
 
 <template name="main">
-<table class="outer">
+  <table class="outer">
     <thead>
       <tr>
         <td>Team:</td>
@@ -23,16 +23,25 @@
   </table>
 
   <div>
-    <span>Insert a checkin:</span>
-    <span>
+    <div>Insert a checkin:</div>
+    <div>
       <select id="team">
 	{{#each teams}}
 	  <option value="{{_id}}">{{name}}</option>
         {{/each}}
       </select>
-      <textarea id="text"/>
+    </div>
+    <div>
+      <span>
+	<textarea id="text" cols="50" rows="5"/>
+     </span>
+     <span>
+       {{#markdown}}{{preview}}{{/markdown}}
+     </span>
+    </div>
+    <div>
       <input type="button" id="add-new-checkin" value="Add"/>
-    </span>
+    </div>
   </div>
 </template>
 
