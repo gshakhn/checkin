@@ -1,19 +1,22 @@
 /* CSS declarations go here */
 
-.outer: {
+.outer {
 }
 
-.team-name: {
+.team-name {
 }
 
-.day-row: {
+.day-row {
 }
 
-.day-label: {
+.day-label {
 }
 
-.team-day: {
+.team-day {
 }
 
-.checkin: {
+.checkin {
+  border-width: 1px;
+  border-style: solid;
+  border-color: red;
 }
