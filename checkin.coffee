@@ -2,7 +2,7 @@ Teams = new Meteor.Collection 'players'
 Checkins = new Meteor.Collection('checkins')
 
 if Meteor.isClient
-  Template.main.teams = -> Teams.find()
+  Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
 
   Template.main.checkins = () -> Checkins.find()
 
