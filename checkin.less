@@ -2,10 +2,37 @@
 
 @border-width: 1px;
 @border-style: solid;
-@border-color: green;
+@border-color: #37516a;
+@med-blue:#54718f;
+
+body {
+  color: #FFF;
+  font-family: calibri, Tahoma, sans-serif;
+  background: #0b293f;
+  background: -moz-linear-gradient(top,  #0b293f 0%, #29536d 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0b293f), color-stop(100%,#29536d));
+  background: -webkit-linear-gradient(top,  #0b293f 0%,#29536d 100%);
+  background: -o-linear-gradient(top,  #0b293f 0%,#29536d 100%);
+  background: -ms-linear-gradient(top,  #0b293f 0%,#29536d 100%);
+  background: linear-gradient(to bottom,  #0b293f 0%,#29536d 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0b293f', endColorstr='#29536d',GradientType=0 );
+}
+
+td, th {padding: 0.6em;}
+
+ul, ol {margin: 0.2em 0.15em;}
+
+li {}
 
 .team-name {
-  text-align: center;
+  text-align: left;
+  background-color: @med-blue;
+  padding-right:0.5em;
+}
+
+.day-label  {
+  text-align: right;
+  background-color: @med-blue;
 }
 
 .outer, .team-day, .team-name, .day-label {
@@ -17,8 +44,8 @@
 
 .checkin {
   border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: red;
+  border-bottom-style: dashed;
+  border-bottom-color: #335f8c;
 }
 
 .checkin:last-child {
@@ -28,8 +55,17 @@
 .preview {
   display: block;
   background-color: #FFF8DC;
+  color:#333;
 }
 
 .add-checkin, .cancel-checkin {
   cursor: pointer;
+  color: #46d35a;
+  float: right;
+
+}
+
+.cancel-checkin {
+  color: #d34646;
+  font-weight: bold;
 }
