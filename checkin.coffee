@@ -18,10 +18,6 @@ if Meteor.isClient
     'click .add-checkin': ->
       Session.set('adding', @_id)
 
-    'click .cancel-checkin': ->
-      Session.set('preview', '')
-      Session.set('adding', null)
-
   Template.day.displayString = -> @toLocaleDateString()
 
   Template.day.teamDays = -> Template.main.teams()
