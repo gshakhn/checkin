@@ -17,7 +17,7 @@
       </tr>
     </thead>
 
-    <tr class"latest-row">
+    <tr class="latest-row">
       <td class="day-label">
 	Latest
       </td>
@@ -35,9 +35,7 @@
 <template name="teamHeader">
   {{name}}
   {{#unless edit}}
-    <a class="add-checkin">+</a>
-  {{else}}
-    <a class="cancel-checkin">&#8212;</a>
+    <a class="add-checkin"><button class="btn btn-mini"><i class="icon-pencil"></i></button></a>
   {{/unless}}
 </template>
 
@@ -73,8 +71,8 @@
           {{#markdown}}{{preview}}{{/markdown}}
         </div>
         <div>
-          <input type="button" id="save-new-checkin" value="Add"/>
-          <input type="button" id="cancel-new-checkin" value="Cancel"/>
+          <button class="btn btn-primary btn-small" id="save-new-checkin">Add</button>
+          <button class="btn btn-small" id="cancel-new-checkin">Cancel</button>
 	</div>
       {{else}}
         {{#markdown}}{{checkin.description}}{{/markdown}}
