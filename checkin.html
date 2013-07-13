@@ -26,10 +26,20 @@
       {{/each}}
     </tr>
 
-    {{#each days}}
-      {{> day}}
-    {{/each}}
+    {{#if showDays}}
+      {{#each days}}
+        {{> day}}
+      {{/each}}
+    {{/if}}
   </table>
+
+  <div class="show-days-option">
+    {{#if showDays}}
+      <a id="show-days-no">Show less</a>
+    {{else}}
+      <a id="show-days-yes">Show more</a>
+    {{/if}}
+  </div>
 </template>
 
 <template name="teamHeader">

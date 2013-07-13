@@ -6,11 +6,20 @@ if Meteor.isClient
 
   Template.main.checkins = () -> Checkins.find()
 
+  Template.main.showDays = -> Session.get('showDays')
+
   Template.main.days = () ->
     days = Template.main.checkins().map (checkin) -> checkin.day
     _.uniq(days).sort().reverse().map (day) -> new Date(day)
 
   Template.main.columnWidth = -> 100 / (Template.main.teams().count())
+
+  Template.main.events =
+    'click #show-days-yes': ->
+      Session.set('showDays', true)
+
+    'click #show-days-no': ->
+      Session.set('showDays', false)
 
   Template.teamHeader.edit = -> Session.equals('adding', @_id)
 
