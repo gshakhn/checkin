@@ -65,10 +65,11 @@ if Meteor.isClient
 
 if Meteor.isServer
   Meteor.startup ->
-    Meteor.settings.teams.forEach (team) ->
-      unless Teams.findOne(name: team.name)?
-        console.log("Adding team #{team.name}")
-        Teams.insert(name: team.name)
+    if Meteor.settings.teams?
+      Meteor.settings.teams.forEach (team) ->
+        unless Teams.findOne(name: team.name)?
+          console.log("Adding team #{team.name}")
+          Teams.insert(name: team.name)
 
     if Meteor.settings.checkins?
       Meteor.settings.checkins.forEach (checkinData) ->
