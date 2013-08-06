@@ -1,6 +1,26 @@
 Teams = new Meteor.Collection 'players'
 Checkins = new Meteor.Collection('checkins')
 
+Checkins.latest = (teamId) -> Checkins.findOne(
+  {teamId: teamId},
+  {sort: [
+    ['day', 'desc']
+    ['createdDate', 'desc']]})
+
+timeAgo = (date) ->
+  now = new Date()
+  diffMins = (now-date)/60000
+  if diffMins < 0
+    "Sometime in the future"
+  else if diffMins < 1440
+    "Today"
+  else if diffMins < 44640
+    dayNum = Math.floor(diffMins/1440)
+    "#{daynum} day#{'s' if dayNum > 1} ago"
+  else
+    monthNum = Math.floor(diffMins/44640)
+    "#{monthNum} month#{'s' if monthNum > 1} ago"
+
 if Meteor.isClient
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
 
@@ -43,11 +63,11 @@ if Meteor.isClient
       sort: [['createdDate', 'desc']]
     })
 
-  Template.teamLatest.checkin = -> Checkins.findOne(
-    {teamId: @_id},
-    {sort: [
-      ['day', 'desc']
-      ['createdDate', 'desc']]})
+  Template.teamLatest.checkin = -> Checkins.latest(@_id)
+
+  Template.teamLatest.dateString = ->
+    checkin = Checkins.latest(@_id)
+    timeAgo((new Date(checkin.day))) if checkin
 
   Template.teamLatest.edit = -> Session.equals('adding', @_id)
 

@@ -1,92 +1,95 @@
 <head>
-  <title>checkin</title>
+    <title>checkin</title>
 </head>
 
 <body>
-  {{> main}}
+{{> main}}
 </body>
 
 <template name="main">
-  <table class="outer">
-    <thead>
-      <tr class="day-row">
-        <td></td>
-	{{#each teams}}
-	  <td class="team-name" style="width:{{columnWidth}}%">{{> teamHeader}}</td>
-        {{/each}}
-      </tr>
-    </thead>
+    <table class="outer">
+        <thead>
+        <tr class="day-row">
+            <td></td>
+            {{#each teams}}
+            <td class="team-name" style="width:{{columnWidth}}%">{{> teamHeader}}</td>
+            {{/each}}
+        </tr>
+        </thead>
 
-    <tr class="latest-row">
-      <td class="day-label">
-	Latest
-      </td>
-      {{#each teams}}
-        {{> teamLatest}}
-      {{/each}}
-    </tr>
+        <tr class="latest-row">
+            <td class="day-label">
+                Latest
+            </td>
+            {{#each teams}}
+            {{> teamLatest}}
+            {{/each}}
+        </tr>
 
-    {{#if showDays}}
-      {{#each days}}
+        {{#if showDays}}
+        {{#each days}}
         {{> day}}
-      {{/each}}
-    {{/if}}
-  </table>
+        {{/each}}
+        {{/if}}
+    </table>
 
-  <div class="show-days-option">
-    {{#if showDays}}
-      <a id="show-days-no">Show less</a>
-    {{else}}
-      <a id="show-days-yes">Show more</a>
-    {{/if}}
-  </div>
+    <div class="show-days-option">
+        {{#if showDays}}
+        <a id="show-days-no">Show less</a>
+        {{else}}
+        <a id="show-days-yes">Show more</a>
+        {{/if}}
+    </div>
 </template>
 
 <template name="teamHeader">
-  {{name}}
-  {{#unless edit}}
-    <a class="add-checkin"><button class="btn btn-mini"><i class="icon-pencil"></i></button></a>
-  {{/unless}}
+    {{name}}
+    {{#unless edit}}
+    <a class="add-checkin">
+        <button class="btn btn-mini"><i class="icon-pencil"></i></button>
+    </a>
+    {{/unless}}
 </template>
 
 <template name="day">
-  <tr class="day-row">
-    <td class="day-label">
-      {{ displayString }}
-    </td>
-    {{#each teamDays }}
-	{{> teamDay}}
-    {{/each}}
-  </tr>
+    <tr class="day-row">
+        <td class="day-label">
+            {{ displayString }}
+        </td>
+        {{#each teamDays }}
+        {{> teamDay}}
+        {{/each}}
+    </tr>
 </template>
 
 <template name="teamDay">
-  <td class="team-day">
-    {{#each checkins}}
-    <div class="checkin">
-      {{#markdown}}{{description}}{{/markdown}}
-      </div>
-    {{/each}}
-  </td>
+    <td class="team-day">
+        {{#each checkins}}
+        <div class="checkin">
+            {{#markdown}}{{description}}{{/markdown}}
+        </div>
+        {{/each}}
+    </td>
 </template>
 
 <template name="teamLatest">
-  <td class="team-day">
-    <div class="checkin">
-      {{#if edit}}
-        <div>
-	  <textarea id="text" cols="30" rows="5"/>
-	</div>
-        <div class="preview">
-          {{#markdown}}{{preview}}{{/markdown}}
+    <td class="team-day">
+        <div class="checkin">
+            {{#if edit}}
+            <div>
+                <textarea id="text" cols="30" rows="5"/>
+            </div>
+            <div class="preview">
+                {{#markdown}}{{preview}}{{/markdown}}
+            </div>
+            <div>
+                <button class="btn btn-primary btn-small" id="save-new-checkin">Add</button>
+                <button class="btn btn-small" id="cancel-new-checkin">Cancel</button>
+            </div>
+            {{else}}
+            <span class="label">{{dateString}}</span>
+            {{#markdown}}{{checkin.description}}{{/markdown}}
+            {{/if}}
         </div>
-        <div>
-          <button class="btn btn-primary btn-small" id="save-new-checkin">Add</button>
-          <button class="btn btn-small" id="cancel-new-checkin">Cancel</button>
-	</div>
-      {{else}}
-        {{#markdown}}{{checkin.description}}{{/markdown}}
-      {{/if}}
-    </div>
-  </td>
+    </td>
 </template>
