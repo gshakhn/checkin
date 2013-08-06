@@ -3,7 +3,14 @@
 </head>
 
 <body>
-{{> main}}
+<div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+        <a class="brand" href="#">Checkin</a>
+    </div>
+</div>
+<div class="container">
+    {{> main}}
+</div>
 </body>
 
 <template name="main">
@@ -21,6 +28,7 @@
             </ul>
         </div>
     </div>
+    <hr>
     {{#if showDays}}
     {{#each days}}
     {{> day}}
@@ -29,21 +37,23 @@
 
     <div class="show-days-option">
         {{#if showDays}}
-        <a id="show-days-no">Show less</a>
+        <a id="show-days-no">Hide history</a>
         {{else}}
-        <a id="show-days-yes">Show more</a>
+        <a id="show-days-yes">Show history</a>
         {{/if}}
     </div>
 </template>
 
 <template name="teamHeader">
-    <span class="label">{{dateString}}</span>
-    {{#unless edit}}
-    <a class="add-checkin">
-        <button class="btn btn-mini"><i class="icon-pencil"></i></button>
-    </a>
-    {{/unless}}
-    <h3>{{name}}</h3>
+    <div class="thumbnail-head">
+        <span class="label">{{dateString}}</span>
+        {{#unless edit}}
+        <a class="add-checkin">
+            <button class="btn btn-mini"><i class="icon-pencil"></i></button>
+        </a>
+        {{/unless}}
+        <h3>{{name}}</h3>
+    </div>
 </template>
 
 <template name="day">
@@ -62,16 +72,20 @@
 <template name="teamDay">
     <li class="span3">
         <div class="thumbnail">
-            {{team.name}}
+            <div class="thumbnail-head">
+                {{team.name}}
+            </div>
             {{#each checkins}}
-            {{#markdown}}{{description}}{{/markdown}}
-            {{/each}}
+            <div class="thumbnail-body">
+                {{#markdown}}{{description}}{{/markdown}}
+                {{/each}}
+            </div>
         </div>
     </li>
 </template>
 
 <template name="teamLatest">
-    <div class="checkin">
+    <div class="thumbnail-body">
         {{#if edit}}
         <div>
             <textarea id="text" cols="30" rows="5"/>
