@@ -47,6 +47,10 @@ if Meteor.isClient
     'click .add-checkin': ->
       Session.set('adding', @_id)
 
+  Template.teamHeader.dateString = ->
+    checkin = Checkins.latest(@_id)
+    timeAgo((new Date(checkin.day))) if checkin
+
   Template.day.displayString = -> @toLocaleDateString()
 
   Template.day.teamDays = -> Template.main.teams()
@@ -64,10 +68,6 @@ if Meteor.isClient
     })
 
   Template.teamLatest.checkin = -> Checkins.latest(@_id)
-
-  Template.teamLatest.dateString = ->
-    checkin = Checkins.latest(@_id)
-    timeAgo((new Date(checkin.day))) if checkin
 
   Template.teamLatest.edit = -> Session.equals('adding', @_id)
 
