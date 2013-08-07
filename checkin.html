@@ -29,19 +29,20 @@
         </div>
     </div>
     <hr>
+
+    <div class="show-days-option">
+        {{#if showDays}}
+        <button id="show-days-no" class="btn btn-default btn-mini"><i class="icon-chevron-up"></i> Hide history</button>
+        {{else}}
+        <button id="show-days-yes" class="btn btn-default btn-mini"><i class="icon-chevron-down"></i> Show history</button>
+        {{/if}}
+    </div>
+
     {{#if showDays}}
     {{#each days}}
     {{> day}}
     {{/each}}
     {{/if}}
-
-    <div class="show-days-option">
-        {{#if showDays}}
-        <a id="show-days-no">Hide history</a>
-        {{else}}
-        <a id="show-days-yes">Show history</a>
-        {{/if}}
-    </div>
 </template>
 
 <template name="teamHeader">
