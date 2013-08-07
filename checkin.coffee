@@ -7,19 +7,28 @@ Checkins.latest = (teamId) -> Checkins.findOne(
     ['day', 'desc']
     ['createdDate', 'desc']]})
 
-timeAgo = (date) ->
-  now = new Date()
-  diffMins = (now-date)/60000
-  if diffMins < 0
-    "Sometime in the future"
-  else if diffMins < 1440
-    "Today"
-  else if diffMins < 44640
-    dayNum = Math.floor(diffMins/1440)
-    "#{daynum} day#{'s' if dayNum > 1} ago"
-  else
-    monthNum = Math.floor(diffMins/44640)
-    "#{monthNum} month#{'s' if monthNum > 1} ago"
+Time =
+  occursToday: (date) ->
+    todayStart = (new Date()).setHours(0,0,0,0)
+    todayStart <= date
+  occurredYesterday: (date) ->
+    todayStart = (new Date()).setHours(0,0,0,0)
+    yesterdayStart = (new Date()).setDate(new Date() - 1)
+    yesterdayStart <= date and todayStart > date
+  minsAgo: (date) ->
+    (new Date() - date)/60000
+  timeAgoString: (date) ->
+    diffMins = Time.minsAgo(date)
+    if diffMins < 0
+      "Sometime in the future"
+    else if diffMins < 1440
+      "Today"
+    else if diffMins < 44640
+      dayNum = Math.floor(diffMins/1440)
+      "#{daynum} day#{'s' if dayNum > 1} ago"
+    else
+      monthNum = Math.floor(diffMins/44640)
+      "#{monthNum} month#{'s' if monthNum > 1} ago"
 
 if Meteor.isClient
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
@@ -47,11 +56,19 @@ if Meteor.isClient
     'click .add-checkin': ->
       Session.set('adding', @_id)
 
-  Template.teamHeader.dateString = ->
+  Template.teamHeader.timeLabel = ->
     checkin = Checkins.latest(@_id)
-    timeAgo((new Date(checkin.day))) if checkin
+    Time.timeAgoString((new Date(checkin.day))) if checkin
 
-  Template.day.displayString = -> @toLocaleDateString()
+  Template.teamHeader.timeLabelClass = ->
+    checkin = Checkins.latest(@_id)
+    if checkin
+      if Time.occursToday((new Date(checkin.day)))
+        "label-success"
+      else if Time.occurredYesterday((new Date(checkin.day)))
+        "label-warning"
+
+  Template.day.dateString = -> @toLocaleDateString()
 
   Template.day.teamDays = -> Template.main.teams()
       .map (team) =>
