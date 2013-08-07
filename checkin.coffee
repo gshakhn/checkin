@@ -25,7 +25,11 @@ Time =
       "Today"
     else if diffMins < 44640
       dayNum = Math.floor(diffMins/1440)
-      "#{dayNum} day#{if dayNum > 1 then 's' else ''} ago"
+      if dayNum > 1
+        "#{dayNum} days ago"
+      else
+        "Yesterday"
+
     else
       monthNum = Math.floor(diffMins/44640)
       "#{monthNum} month#{if monthNum > 1 then 's' else ''} ago"

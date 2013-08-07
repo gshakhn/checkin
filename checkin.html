@@ -15,17 +15,13 @@
 
 <template name="main">
     <div class="row">
-        <div class="span12">
-            <ul class="thumbnails">
-                {{#each teams}}
-                <li class="span3">
-                    <div class="thumbnail">
-                        {{> teamHeader}}
-                        {{> teamLatest}}
-                    </div>
-                </li>
-                {{/each}}
-            </ul>
+        <div class="flow">
+            {{#each teams}}
+            <div class="thumbnail flow-item">
+                {{> teamHeader}}
+                {{> teamLatest}}
+            </div>
+            {{/each}}
         </div>
     </div>
     <hr>
@@ -57,32 +53,29 @@
 
 <template name="day">
     <div class="row">
-        <div class="span12">
-            <h4>{{ dateString }}</h4>
-            <ul class="thumbnails">
-                {{#each teamDays}}
-                {{> teamDay}}
-                {{/each}}
-            </ul>
+        <h4>{{ dateString }}</h4>
+
+        <div class="flow">
+            {{#each teamDays}}
+            {{> teamDay}}
+            {{/each}}
         </div>
     </div>
 </template>
 
 <template name="teamDay">
-    <li class="span3">
-        <div class="thumbnail">
-            <div class="thumbnail-head">
-                {{team.name}}
-            </div>
-            <div class="thumbnail-body">
-                {{#each checkins}}
-                <div class="checkin">
-                    {{#markdown}}{{description}}{{/markdown}}
-                </div>
-                {{/each}}
-            </div>
+    <div class="thumbnail flow-item">
+        <div class="thumbnail-head">
+            <h4>{{team.name}}</h4>
         </div>
-    </li>
+        <div class="thumbnail-body">
+            {{#each checkins}}
+            <div class="checkin">
+                {{#markdown}}{{description}}{{/markdown}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
 </template>
 
 <template name="teamLatest">
