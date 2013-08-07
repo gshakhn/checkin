@@ -13,7 +13,7 @@ Time =
     todayStart <= date
   occurredYesterday: (date) ->
     todayStart = (new Date()).setHours(0,0,0,0)
-    yesterdayStart = (new Date()).setDate(new Date() - 1)
+    yesterdayStart = todayStart - 86400000
     yesterdayStart <= date and todayStart > date
   minsAgo: (date) ->
     (new Date() - date)/60000
@@ -25,10 +25,10 @@ Time =
       "Today"
     else if diffMins < 44640
       dayNum = Math.floor(diffMins/1440)
-      "#{daynum} day#{'s' if dayNum > 1} ago"
+      "#{dayNum} day#{if dayNum > 1 then 's' else ''} ago"
     else
       monthNum = Math.floor(diffMins/44640)
-      "#{monthNum} month#{'s' if monthNum > 1} ago"
+      "#{monthNum} month#{if monthNum > 1 then 's' else ''} ago"
 
 if Meteor.isClient
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
