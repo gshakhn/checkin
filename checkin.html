@@ -48,9 +48,7 @@
     <div class="thumbnail-head">
         <span class="label">{{dateString}}</span>
         {{#unless edit}}
-        <a class="add-checkin">
-            <button class="btn btn-mini"><i class="icon-pencil"></i></button>
-        </a>
+        <button class="add-checkin btn btn-mini"><i class="icon-pencil"></i></button>
         {{/unless}}
         <h3>{{name}}</h3>
     </div>
@@ -75,9 +73,11 @@
             <div class="thumbnail-head">
                 {{team.name}}
             </div>
-            {{#each checkins}}
             <div class="thumbnail-body">
-                {{#markdown}}{{description}}{{/markdown}}
+                {{#each checkins}}
+                <div class="checkin">
+                    {{#markdown}}{{description}}{{/markdown}}
+                </div>
                 {{/each}}
             </div>
         </div>
