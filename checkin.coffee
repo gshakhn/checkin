@@ -34,14 +34,26 @@ if Meteor.isClient
         monthNum = Math.floor(diffMins/44640)
         "#{monthNum} month#{if monthNum > 1 then 's' else ''} ago"
 
-  CurrentDate =
-    setInterval: -> CurrentDate.interval = Meteor.setInterval(CurrentDate.update, 1000)
-    clearInterval: -> Meteor.clearInterval(CurrentDate.interval)
-    dateDep: new Deps.Dependency()
-    depend: -> CurrentDate.dateDep.depend()
-    update: ->
-      CurrentDate.date = new Date()
-      CurrentDate.dateDep.changed()
+  class CurrentDate
+    instance = null
+    interval = null
+    date = null
+    dateDep = new Deps.Dependency()
+    update = ->
+      date = new Date()
+      dateDep.changed()
+    setInterval = -> interval = Meteor.setInterval(update, 1000)
+    clearInterval = -> Meteor.clearInterval(interval)
+
+    class PrivateDate
+      constructor: ->
+        update()
+        setInterval()
+      depend: -> dateDep.depend()
+      getDate: -> date
+    @get: ->
+      instance ?= new PrivateDate()
+
 
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
 
@@ -69,24 +81,18 @@ if Meteor.isClient
       Session.set('adding', @_id)
 
   Template.teamHeader.timeLabel = ->
-    CurrentDate.depend()
+    CurrentDate.get().depend()
     checkin = Checkins.latest(@_id)
     Time.timeAgoString((new Date(checkin.day))) if checkin
 
   Template.teamHeader.timeLabelClass = ->
-    CurrentDate.depend()
+    CurrentDate.get().depend()
     checkin = Checkins.latest(@_id)
     if checkin
       if Time.occursToday((new Date(checkin.day)))
         "label-success"
       else if Time.occurredYesterday((new Date(checkin.day)))
         "label-warning"
-
-  Template.teamHeader.created = ->
-    CurrentDate.setInterval()
-
-  Template.teamHeader.destroyed = ->
-    CurrentDate.clearInterval()
 
   Template.day.dateString = -> @toLocaleDateString()
 
