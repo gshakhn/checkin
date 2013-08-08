@@ -1,7 +1,60 @@
 Teams = new Meteor.Collection 'players'
 Checkins = new Meteor.Collection('checkins')
 
+Checkins.latest = (teamId) -> Checkins.findOne(
+  {teamId: teamId},
+  {sort: [
+    ['day', 'desc']
+    ['createdDate', 'desc']]})
+
 if Meteor.isClient
+  Time =
+    occursToday: (date) ->
+      todayStart = (new Date()).setHours(0,0,0,0)
+      todayStart <= date
+    occurredYesterday: (date) ->
+      todayStart = (new Date()).setHours(0,0,0,0)
+      yesterdayStart = todayStart - 86400000
+      yesterdayStart <= date and todayStart > date
+    minsAgo: (date) ->
+      (new Date() - date)/60000
+    timeAgoString: (date) ->
+      diffMins = Time.minsAgo(date)
+      if diffMins < 0
+        "Sometime in the future"
+      else if diffMins < 1440
+        "Today"
+      else if diffMins < 44640
+        dayNum = Math.floor(diffMins/1440)
+        if dayNum > 1
+          "#{dayNum} days ago"
+        else
+          "Yesterday"
+      else
+        monthNum = Math.floor(diffMins/44640)
+        "#{monthNum} month#{if monthNum > 1 then 's' else ''} ago"
+
+  class CurrentDate
+    instance = null
+    interval = null
+    date = null
+    dateDep = new Deps.Dependency()
+    update = ->
+      date = new Date()
+      dateDep.changed()
+    setInterval = -> interval = Meteor.setInterval(update, 1000)
+    clearInterval = -> Meteor.clearInterval(interval)
+
+    class PrivateDate
+      constructor: ->
+        update()
+        setInterval()
+      depend: -> dateDep.depend()
+      getDate: -> date
+    @get: ->
+      instance ?= new PrivateDate()
+
+
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
 
   Template.main.checkins = () -> Checkins.find()
@@ -27,7 +80,21 @@ if Meteor.isClient
     'click .add-checkin': ->
       Session.set('adding', @_id)
 
-  Template.day.displayString = -> @toLocaleDateString()
+  Template.teamHeader.timeLabel = ->
+    CurrentDate.get().depend()
+    checkin = Checkins.latest(@_id)
+    Time.timeAgoString((new Date(checkin.day))) if checkin
+
+  Template.teamHeader.timeLabelClass = ->
+    CurrentDate.get().depend()
+    checkin = Checkins.latest(@_id)
+    if checkin
+      if Time.occursToday((new Date(checkin.day)))
+        "label-success"
+      else if Time.occurredYesterday((new Date(checkin.day)))
+        "label-warning"
+
+  Template.day.dateString = -> @toLocaleDateString()
 
   Template.day.teamDays = -> Template.main.teams()
       .map (team) =>
@@ -43,11 +110,7 @@ if Meteor.isClient
       sort: [['createdDate', 'desc']]
     })
 
-  Template.teamLatest.checkin = -> Checkins.findOne(
-    {teamId: @_id},
-    {sort: [
-      ['day', 'desc']
-      ['createdDate', 'desc']]})
+  Template.teamLatest.checkin = -> Checkins.latest(@_id)
 
   Template.teamLatest.edit = -> Session.equals('adding', @_id)
 
