@@ -1,92 +1,98 @@
 <head>
-  <title>checkin</title>
+    <title>checkin</title>
 </head>
 
 <body>
-  {{> main}}
+<div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+        <a class="brand" href="#">Checkin</a>
+    </div>
+</div>
+<div class="container">
+    {{> main}}
+</div>
 </body>
 
 <template name="main">
-  <table class="outer">
-    <thead>
-      <tr class="day-row">
-        <td></td>
-	{{#each teams}}
-	  <td class="team-name" style="width:{{columnWidth}}%">{{> teamHeader}}</td>
-        {{/each}}
-      </tr>
-    </thead>
+    <div class="row">
+        <div class="flow">
+            {{#each teams}}
+            <div class="thumbnail flow-item">
+                {{> teamHeader}}
+                {{> teamLatest}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <hr>
 
-    <tr class="latest-row">
-      <td class="day-label">
-	Latest
-      </td>
-      {{#each teams}}
-        {{> teamLatest}}
-      {{/each}}
-    </tr>
+    <div class="show-days-option">
+        {{#if showDays}}
+        <button id="show-days-no" class="btn btn-default btn-mini"><i class="icon-chevron-up"></i> Hide history</button>
+        {{else}}
+        <button id="show-days-yes" class="btn btn-default btn-mini"><i class="icon-chevron-down"></i> Show history</button>
+        {{/if}}
+    </div>
 
     {{#if showDays}}
-      {{#each days}}
-        {{> day}}
-      {{/each}}
+    {{#each days}}
+    {{> day}}
+    {{/each}}
     {{/if}}
-  </table>
-
-  <div class="show-days-option">
-    {{#if showDays}}
-      <a id="show-days-no">Show less</a>
-    {{else}}
-      <a id="show-days-yes">Show more</a>
-    {{/if}}
-  </div>
 </template>
 
 <template name="teamHeader">
-  {{name}}
-  {{#unless edit}}
-    <a class="add-checkin"><button class="btn btn-mini"><i class="icon-pencil"></i></button></a>
-  {{/unless}}
+    <div class="thumbnail-head">
+        <span class="label {{timeLabelClass}}">{{timeLabel}}</span>
+        {{#unless edit}}
+        <button class="add-checkin btn btn-mini"><i class="icon-pencil"></i></button>
+        {{/unless}}
+        <h3>{{name}}</h3>
+    </div>
 </template>
 
 <template name="day">
-  <tr class="day-row">
-    <td class="day-label">
-      {{ displayString }}
-    </td>
-    {{#each teamDays }}
-	{{> teamDay}}
-    {{/each}}
-  </tr>
+    <div class="row">
+        <h4>{{ dateString }}</h4>
+
+        <div class="flow">
+            {{#each teamDays}}
+            {{> teamDay}}
+            {{/each}}
+        </div>
+    </div>
 </template>
 
 <template name="teamDay">
-  <td class="team-day">
-    {{#each checkins}}
-    <div class="checkin">
-      {{#markdown}}{{description}}{{/markdown}}
-      </div>
-    {{/each}}
-  </td>
+    <div class="thumbnail flow-item">
+        <div class="thumbnail-head">
+            <h4>{{team.name}}</h4>
+        </div>
+        <div class="thumbnail-body">
+            {{#each checkins}}
+            <div class="checkin">
+                {{#markdown}}{{description}}{{/markdown}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
 </template>
 
 <template name="teamLatest">
-  <td class="team-day">
-    <div class="checkin">
-      {{#if edit}}
+    <div class="thumbnail-body">
+        {{#if edit}}
         <div>
-	  <textarea id="text" cols="30" rows="5"/>
-	</div>
+            <textarea id="text" cols="30" rows="5"/>
+        </div>
         <div class="preview">
-          {{#markdown}}{{preview}}{{/markdown}}
+            {{#markdown}}{{preview}}{{/markdown}}
         </div>
         <div>
-          <button class="btn btn-primary btn-small" id="save-new-checkin">Add</button>
-          <button class="btn btn-small" id="cancel-new-checkin">Cancel</button>
-	</div>
-      {{else}}
+            <button class="btn btn-primary btn-small" id="save-new-checkin">Add</button>
+            <button class="btn btn-small" id="cancel-new-checkin">Cancel</button>
+        </div>
+        {{else}}
         {{#markdown}}{{checkin.description}}{{/markdown}}
-      {{/if}}
+        {{/if}}
     </div>
-  </td>
 </template>
