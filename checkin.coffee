@@ -42,7 +42,7 @@ if Meteor.isClient
     update = ->
       date = new Date()
       dateDep.changed()
-    setInterval = -> interval = Meteor.setInterval(update, 1000)
+    setInterval = -> interval = Meteor.setInterval(update, 60000)
     clearInterval = -> Meteor.clearInterval(interval)
 
     class PrivateDate
