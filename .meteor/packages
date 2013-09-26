@@ -13,3 +13,5 @@ less
 coffeescript
 bootstrap
 standard-app-packages
+accounts-password
+iron-router

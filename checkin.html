@@ -3,17 +3,25 @@
 </head>
 
 <body>
-<div class="navbar navbar-inverse">
-    <div class="navbar-inner">
-        <a class="brand" href="#">Checkin</a>
-    </div>
-</div>
-<div class="container">
     {{> main}}
-</div>
 </body>
 
 <template name="main">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <a class="brand" href="#">Checkin</a>
+            <div class="pull-right">
+                {{#if currentUser}}
+                <button id="log-out-btn" class="btn">Log out</button>
+                {{else}}
+                <a href="#create-user-modal" role="button" class="btn" data-toggle="modal">Create user</a>
+                <a href="#sign-in-modal" role="button" class="btn" data-toggle="modal">Sign in</a>
+                {{/if}}
+            </div>
+
+        </div>
+    </div>
+    <div class="container">
     <div class="row">
         <div class="flow">
             {{#each teams}}
@@ -39,6 +47,56 @@
     {{> day}}
     {{/each}}
     {{/if}}
+
+    <div id="create-user-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="color: black">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>You're all like, sign me up!</h3>
+        </div>
+        <div class="modal-body">
+            <p>Enter your email address and we'll <strike>spam you mercilessly</strike> send you a message to guide you through the process.</p>
+            <form class="form-inline">
+                <input id="create-user-email" type="text" placeholder="example@internet.web">
+                <button id="create-user" class="btn btn-primary">Let's do this</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Actually, I'm not sure I'm cool enough</button>
+        </div>
+    </div>
+
+    <div id="sign-in-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="color: black">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Sign in</h3>
+        </div>
+        <div class="modal-body">
+            <form class="form-inline">
+                <input id="sign-in-email" type="text" placeholder="email address">
+                <input id="sign-in-password" type="password" placeholder="password">
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="sign-in-button" class="btn btn-primary">Sign in</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+
+    <div id="verify-email-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="color: black">
+        <div class="modal-header">
+            <h3>Email verified!</h3>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <input id="password-input" type="password" placeholder="Choose a password">
+                </div>
+                <button id="create-password" class="btn btn-primary">Done</button>
+            </form>
+            <p></p>
+        </div>
+    </div>
+    </div>
 </template>
 
 <template name="teamHeader">
