@@ -147,6 +147,7 @@ if Meteor.isClient
         description: description
         day: new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate()).toISOString()
         createdDate: createdDate.toISOString()
+        user: Meteor.userId()
       $('#text').val('')
       Session.set('preview', '')
       Session.set('adding', null)
