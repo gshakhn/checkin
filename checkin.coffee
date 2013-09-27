@@ -122,6 +122,15 @@ if Meteor.isClient
   Template.teamHeader.events =
     'click .add-checkin': ->
       Session.set('adding', @_id)
+    'click .same-checkin': ->
+      checkin = Checkins.latest(@_id)
+      createdDate = new Date()
+      Checkins.insert
+        teamId: @_id
+        description: checkin.description
+        day: new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate()).toISOString()
+        createdDate: createdDate.toISOString()
+        user: Meteor.userId()
   Template.teamHeader.timeLabel = ->
     CurrentDate.get().depend()
     checkin = Checkins.latest(@_id)
