@@ -42,6 +42,10 @@ if Meteor.isClient
       todayStart = (new Date()).setHours(0,0,0,0)
       yesterdayStart = todayStart - 86400000
       yesterdayStart <= date and todayStart > date
+    occurredThisWeek: (date) ->
+      todayStart = (new Date()).setHours(0,0,0,0)
+      yesterdayStart = todayStart - 604800000
+      yesterdayStart <= date and todayStart > date
     minsAgo: (date) ->
       (new Date() - date)/60000
     timeAgoString: (date) ->
@@ -148,7 +152,7 @@ if Meteor.isClient
     if checkin
       if Time.occursToday((new Date(checkin.day)))
         "label-success"
-      else if Time.occurredYesterday((new Date(checkin.day)))
+      else if Time.occurredThisWeek((new Date(checkin.day)))
         "label-warning"
 
 
