@@ -2,6 +2,20 @@ Teams = new Meteor.Collection 'players'
 Checkins = new Meteor.Collection('checkins')
 GlobalSettings = new Meteor.Collection 'global_settings'
 
+Checkins.addOrUpdate = (teamId, userId, description) ->
+  latest = Checkins.latest teamId
+  createdDate = new Date()
+  day = new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate()).toISOString()
+  if day isnt latest.day
+    Checkins.insert
+      teamId: teamId
+      description: description
+      day: day
+      createdDate: createdDate.toISOString()
+      user: userId
+  else
+    Checkins.update { _id: latest._id }, { $set: { description: description, user: userId }}
+
 Checkins.latest = (teamId) -> Checkins.findOne(
   {teamId: teamId},
   {sort: [
@@ -119,18 +133,11 @@ if Meteor.isClient
 
 
   Template.teamHeader.edit = -> Session.equals('adding', @_id)
+  Template.teamHeader.alreadyCheckedIn = -> Time.occursToday(new Date(Checkins.latest(@_id).createdDate))
   Template.teamHeader.events =
     'click .add-checkin': ->
       Session.set('adding', @_id)
-    'click .same-checkin': ->
-      checkin = Checkins.latest(@_id)
-      createdDate = new Date()
-      Checkins.insert
-        teamId: @_id
-        description: checkin.description
-        day: new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate()).toISOString()
-        createdDate: createdDate.toISOString()
-        user: Meteor.userId()
+    'click .same-checkin': -> Checkins.addOrUpdate @_id, Meteor.userId(), Checkins.latest(@_id).description
   Template.teamHeader.timeLabel = ->
     CurrentDate.get().depend()
     checkin = Checkins.latest(@_id)
@@ -168,13 +175,7 @@ if Meteor.isClient
   Template.teamLatest.events =
     'click #save-new-checkin': ->
       description = $('#text').val()
-      createdDate = new Date()
-      Checkins.insert
-        teamId: @_id
-        description: description
-        day: new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate()).toISOString()
-        createdDate: createdDate.toISOString()
-        user: Meteor.userId()
+      Checkins.addOrUpdate @_id, Meteor.userId(), description
       $('#text').val('')
       Session.set('preview', '')
       Session.set('adding', null)
