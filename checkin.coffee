@@ -107,6 +107,14 @@ if Meteor.isClient
 
 
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
+  Template.main.teamColumns = ->
+    teams = Teams.find({}, {sort: [['name', 'asc']]}).fetch()
+    numColumns = 4
+    chunkSize = Math.ceil teams.length/numColumns
+    teamColumns = []
+    for i in [0...numColumns]
+      teamColumns.push teams[chunkSize*i ... chunkSize*(i+1)]
+    teamColumns
   Template.main.checkins = () -> Checkins.find()
   Template.main.showDays = -> Session.get('showDays')
   Template.main.restrictedDomain = -> GlobalSettings.getSetting 'restrictedDomain'

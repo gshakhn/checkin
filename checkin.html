@@ -26,14 +26,16 @@
     </div>
     <div class="container">
     <div class="row">
-        <div class="flow">
-            {{#each teams}}
-            <div class="thumbnail flow-item">
+        {{#each teamColumns}}
+        <div class="span3">
+            {{#each this}}
+            <div class="thumbnail">
                 {{> teamHeader}}
                 {{> teamLatest}}
             </div>
             {{/each}}
         </div>
+        {{/each}}
     </div>
     <hr>
 
