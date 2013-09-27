@@ -1,11 +1,23 @@
 Teams = new Meteor.Collection 'players'
 Checkins = new Meteor.Collection('checkins')
+GlobalSettings = new Meteor.Collection 'global_settings'
 
 Checkins.latest = (teamId) -> Checkins.findOne(
   {teamId: teamId},
   {sort: [
     ['day', 'desc']
     ['createdDate', 'desc']]})
+
+GlobalSettings.getSetting = (settingName) ->
+  setting = GlobalSettings.findOne { name: settingName }
+  if setting? and setting.value? then setting.value else null
+
+GlobalSettings.setSetting = (settingName, settingValue) ->
+  setting = { name: settingName, value: settingValue }
+  if GlobalSettings.getSetting(settingName)?
+    GlobalSettings.update { name: settingName }, setting
+  else
+    GlobalSettings.insert setting
 
 if Meteor.isClient
   Time =
@@ -60,15 +72,18 @@ if Meteor.isClient
     this.route 'enroll-account', {
       path: '/enroll-account/:token',
       controller: 'VerifyEmailController',
-      action: 'show'
     }
 
-  class @VerifyEmailController extends RouteController
-    show: ->
+  class @MainController extends RouteController
+    template: 'main'
+
+  class @VerifyEmailController extends MainController
+    run: ->
+      this.render()
       token = this.params.token
       Accounts.verifyEmail token
       Session.set 'token', token
-      $('#verify-email-modal').modal({kayboard: false, backdrop: 'static'}).modal('show')
+      Meteor.defer -> $('#verify-email-modal').modal()
     hide: ->
       $('#verify-email-modal').modal('hide')
 
@@ -76,6 +91,7 @@ if Meteor.isClient
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
   Template.main.checkins = () -> Checkins.find()
   Template.main.showDays = -> Session.get('showDays')
+  Template.main.restrictedDomain = -> GlobalSettings.getSetting 'restrictedDomain'
   Template.main.days = () ->
     days = Template.main.checkins().map (checkin) -> checkin.day
     _.uniq(days).sort().reverse().map (day) -> new Date(day)
@@ -86,7 +102,7 @@ if Meteor.isClient
     'click #show-days-no': ->
       Session.set('showDays', false)
     'click #create-user': ->
-      emailAddress = $('#create-user-email').val()
+      emailAddress = $('#create-user-email').val().trim()
       Meteor.call('createUserWithEmail', emailAddress)
     'click #create-password': ->
       Accounts.resetPassword Session.get('token'), $('#password-input').val()
@@ -96,8 +112,10 @@ if Meteor.isClient
     'click #sign-in-button': ->
       emailAddress = $('#sign-in-email').val()
       password = $('#sign-in-password').val()
-      Meteor.loginWithPassword {email: emailAddress}, password
-
+      if GlobalSettings.getSetting 'restrictedDomain'
+        Meteor.loginWithPassword { username: emailAddress }, password
+      else
+        Meteor.loginWithPassword {email: emailAddress}, password
 
 
   Template.teamHeader.edit = -> Session.equals('adding', @_id)
@@ -161,7 +179,12 @@ if Meteor.isServer
   Meteor.startup ->
     Meteor.methods({
       createUserWithEmail: (emailAddress) ->
-        userId = Accounts.createUser({email: emailAddress})
+        user = { email: emailAddress }
+        domain = GlobalSettings.getSetting 'restrictedDomain'
+        if domain
+          user.email = "#{emailAddress}@#{domain}"
+          user.username = emailAddress
+        userId = Accounts.createUser(user)
         Accounts.sendEnrollmentEmail(userId)
     })
 
@@ -181,3 +204,11 @@ if Meteor.isServer
             description: checkinData.description
             day: checkinData.day
             createdDate: (new Date()).toISOString()
+
+    if Meteor.settings.globalSettings?
+      domain = Meteor.settings.globalSettings.restrictedDomain
+      if domain?
+        console.log("Adding global setting: restrictedDomain = #{Meteor.settings.globalSettings.restrictedDomain}")
+        if domain
+          domain = domain.trim()
+        GlobalSettings.setSetting 'restrictedDomain', domain
