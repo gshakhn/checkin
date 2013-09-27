@@ -120,7 +120,12 @@
     <div class="thumbnail-head">
         <span class="label {{timeLabelClass}}">{{timeLabel}}</span>
         {{#unless edit}}
-        <button class="add-checkin btn btn-mini"><i class="icon-pencil"></i></button>
+        {{#if alreadyCheckedIn}}
+        <button class="add-checkin btn btn-mini" title="Edit today's checkin"><i class="icon-edit"></i></button>
+        {{else}}
+        <button class="same-checkin btn btn-mini" title="Lazy Button&#8482;"><i class="icon-repeat"></i></button>
+        <button class="add-checkin btn btn-mini" title="Create new checkin"><i class="icon-pencil"></i></button>
+        {{/if}}
         {{/unless}}
         <h3>{{name}}</h3>
     </div>
@@ -157,7 +162,7 @@
     <div class="thumbnail-body">
         {{#if edit}}
         <div>
-            <textarea id="text" cols="30" rows="5"/>
+            <textarea id="text" cols="30" rows="5">{{checkin.description}}</textarea>
         </div>
         <div class="preview">
             {{#markdown}}{{preview}}{{/markdown}}
