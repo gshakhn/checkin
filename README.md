@@ -10,6 +10,12 @@ This app runs with [meteor](http://meteor.com/). Install via:
 
     curl https://install.meteor.com | sh
 
+Most packages are managed with meteor, but at least one is managed 
+with [meteorite](http://oortcloud.github.io/meteorite/). Once meteorite 
+is installed, install meteorite-managed packages with the following command:
+
+    mrt install
+
 Configure the teams you need by copying `data.json.template` to `data.json` and modifying the teams array appropriately.
 
 Once the teams are setup, you can run the app by doing:
