@@ -2,6 +2,6 @@
 
 rm -rf bundle
 tar -xzf checkin.tgz
-cd bundle/server/node_modules
+cd bundle/programs/server/node_modules
 rm -rf fibers
-npm install fibers@1.0.0
+npm install fibers@1.0.1
