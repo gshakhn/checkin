@@ -107,6 +107,7 @@ if Meteor.isClient
 
 
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
+  Template.main.usersEnabled = -> GlobalSettings.getSetting 'usersEnabled'
   Template.main.teamColumns = ->
     teams = Teams.find({}, {sort: [['name', 'asc']]}).fetch()
     numColumns = 4
@@ -145,7 +146,9 @@ if Meteor.isClient
 
 
   Template.teamHeader.edit = -> Session.equals('adding', @_id)
-  Template.teamHeader.alreadyCheckedIn = -> Time.occursToday(new Date(Checkins.latest(@_id).createdDate))
+  Template.teamHeader.alreadyCheckedIn = ->
+    latest = Checkins.latest(@_id)
+    latest? and Time.occursToday(new Date(latest.createdDate))
   Template.teamHeader.events =
     'click .add-checkin': ->
       Session.set('adding', @_id)
@@ -230,7 +233,12 @@ if Meteor.isServer
     if Meteor.settings.globalSettings?
       domain = Meteor.settings.globalSettings.restrictedDomain
       if domain?
-        console.log("Adding global setting: restrictedDomain = #{Meteor.settings.globalSettings.restrictedDomain}")
+        console.log("Adding global setting: restrictedDomain = #{domain}")
         if domain
           domain = domain.trim()
         GlobalSettings.setSetting 'restrictedDomain', domain
+
+      usersEnabled = Meteor.settings.globalSettings.usersEnabled
+      if domain?
+        console.log("Adding global setting: usersEnabled = #{usersEnabled}")
+        GlobalSettings.setSetting 'usersEnabled', usersEnabled
