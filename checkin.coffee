@@ -22,13 +22,16 @@ Checkins.latest = (teamId) -> Checkins.findOne(
     ['day', 'desc']
     ['createdDate', 'desc']]})
 
+GlobalSettings.settingExists = (settingName) ->
+  GlobalSettings.findOne({ name: settingName })?
+
 GlobalSettings.getSetting = (settingName) ->
   setting = GlobalSettings.findOne { name: settingName }
   if setting? and setting.value? then setting.value else null
 
 GlobalSettings.setSetting = (settingName, settingValue) ->
   setting = { name: settingName, value: settingValue }
-  if GlobalSettings.getSetting(settingName)?
+  if GlobalSettings.settingExists settingName
     GlobalSettings.update { name: settingName }, setting
   else
     GlobalSettings.insert setting
@@ -238,7 +241,6 @@ if Meteor.isServer
           domain = domain.trim()
         GlobalSettings.setSetting 'restrictedDomain', domain
 
-      usersEnabled = Meteor.settings.globalSettings.usersEnabled
-      if domain?
-        console.log("Adding global setting: usersEnabled = #{usersEnabled}")
-        GlobalSettings.setSetting 'usersEnabled', usersEnabled
+      usersEnabled = Meteor.settings.globalSettings.usersEnabled and domain and process.env.MAIL_URL
+      console.log("Adding global setting: usersEnabled = #{usersEnabled}")
+      GlobalSettings.setSetting 'usersEnabled', usersEnabled
