@@ -88,6 +88,10 @@ if Meteor.isClient
       instance ?= new PrivateDate()
 
 
+  Router.configure
+    layout: 'layout'
+    renderTemplates: { nav: { to: 'nav' }}
+
   Router.map ->
     this.route 'main', { path: '/' }
     this.route 'enroll-account', {
@@ -107,6 +111,12 @@ if Meteor.isClient
       Meteor.defer -> $('#verify-email-modal').modal()
     hide: ->
       $('#verify-email-modal').modal('hide')
+
+
+  Template.nav.usersEnabled = -> GlobalSettings.getSetting 'usersEnabled'
+  Template.nav.events =
+    'click #log-out-btn': ->
+      Meteor.logout (error) -> console.log(error)
 
 
   Template.main.teams = -> Teams.find({}, {sort: [['name', 'asc']]})
@@ -137,8 +147,6 @@ if Meteor.isClient
     'click #create-password': ->
       Accounts.resetPassword Session.get('token'), $('#password-input').val()
       Router.go 'main'
-    'click #log-out-btn': ->
-      Meteor.logout (error) -> console.log(error)
     'click #sign-in-button': ->
       emailAddress = $('#sign-in-email').val()
       password = $('#sign-in-password').val()
@@ -205,7 +213,7 @@ if Meteor.isClient
 
 if Meteor.isServer
   Meteor.startup ->
-    Meteor.methods({
+    Meteor.methods
       createUserWithEmail: (emailAddress) ->
         user = { email: emailAddress }
         domain = GlobalSettings.getSetting 'restrictedDomain'
@@ -214,7 +222,6 @@ if Meteor.isServer
           user.username = emailAddress
         userId = Accounts.createUser(user)
         Accounts.sendEnrollmentEmail(userId)
-    })
 
     if Meteor.settings.teams?
       Meteor.settings.teams.forEach (team) ->
