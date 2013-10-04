@@ -6,7 +6,7 @@ Checkins.addOrUpdate = (teamId, userId, description) ->
   latest = Checkins.latest teamId
   createdDate = new Date()
   day = new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate()).toISOString()
-  if day isnt latest.day
+  if not latest or day isnt latest.day
     Checkins.insert
       teamId: teamId
       description: description
