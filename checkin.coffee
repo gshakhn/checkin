@@ -94,6 +94,7 @@ if Meteor.isClient
 
   Router.map ->
     this.route 'main', { path: '/' }
+    this.route 'observatory', { path: '/observatory' }
     this.route 'enroll-account', {
       path: '/enroll-account/:token',
       controller: 'VerifyEmailController',
@@ -101,6 +102,9 @@ if Meteor.isClient
 
   class @MainController extends RouteController
     template: 'main'
+
+  class @ObservatoryController extends RouteController
+    template: 'observatory'
 
   class @VerifyEmailController extends MainController
     run: ->
