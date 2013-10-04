@@ -167,7 +167,7 @@ if Meteor.isClient
   Template.teamHeader.events =
     'click .add-checkin': ->
       Session.set('adding', @_id)
-    'click .same-checkin': -> Checkins.addOrUpdate @_id, Meteor.userId(), Checkins.latest(@_id).description
+    'click .lazy-button-confirm': -> Checkins.addOrUpdate @_id, Meteor.userId(), Checkins.latest(@_id).description
   Template.teamHeader.timeLabel = ->
     CurrentDate.get().depend()
     checkin = Checkins.latest(@_id)

@@ -131,12 +131,24 @@
     <div class="thumbnail-head">
         <span class="label {{timeLabelClass}}">{{timeLabel}}</span>
         {{#unless edit}}
-        {{#if alreadyCheckedIn}}
-        <button class="add-checkin btn btn-mini" title="Edit today's checkin"><i class="icon-edit"></i></button>
-        {{else}}
-        <button class="same-checkin btn btn-mini" title="Lazy Button&#8482;"><i class="icon-retweet"></i></button>
-        <button class="add-checkin btn btn-mini" title="Create new checkin"><i class="icon-pencil"></i></button>
-        {{/if}}
+        <div class="team-head-buttons">
+            {{#if alreadyCheckedIn}}
+            <button class="add-checkin btn btn-mini" title="Edit today's checkin"><i class="icon-edit"></i></button>
+            {{else}}
+            <div class="btn-group">
+                <button class="same-checkin btn btn-mini dropdown-toggle" data-toggle="dropdown"
+                        title="Lazy Button&#8482;"><i class="icon-retweet"></i></button>
+                <ul class="dropdown-menu lazy-button-dropdown">
+                    <li>Reuse the most recent checkin?
+                        <button class="lazy-button-confirm btn btn-mini">Yes</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button class="add-checkin btn btn-mini" title="Create new checkin"><i class="icon-pencil"></i></button>
+            </div>
+            {{/if}}
+        </div>
         {{/unless}}
         <h3>{{name}}</h3>
     </div>
