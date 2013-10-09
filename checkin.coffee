@@ -55,14 +55,13 @@ if Meteor.isClient
       diffMins = Time.minsAgo(date)
       if diffMins < 0
         "Sometime in the future"
-      else if diffMins < 1440
+      else if Time.occursToday(date)
         "Today"
+      else if Time.occurredYesterday(date)
+        "Yesterday"
       else if diffMins < 44640
         dayNum = Math.floor(diffMins/1440)
-        if dayNum > 1
-          "#{dayNum} days ago"
-        else
-          "Yesterday"
+        "#{dayNum} days ago"
       else
         monthNum = Math.floor(diffMins/44640)
         "#{monthNum} month#{if monthNum > 1 then 's' else ''} ago"
