@@ -145,15 +145,17 @@
                 </ul>
             </div>
             {{else}}
-            <div class="btn-group">
-                <button class="same-checkin btn btn-mini dropdown-toggle" data-toggle="dropdown"
-                        title="Lazy Button&#8482;"><i class="icon-retweet"></i></button>
-                <ul class="dropdown-menu confirmation-dropdown">
-                    <li>Reuse the most recent checkin?
-                        <button class="lazy-button-confirm btn btn-mini">Yes</button>
-                    </li>
-                </ul>
-            </div>
+                {{#if latestCheckin}}
+                <div class="btn-group">
+                    <button class="same-checkin btn btn-mini dropdown-toggle" data-toggle="dropdown"
+                            title="Lazy Button&#8482;"><i class="icon-retweet"></i></button>
+                    <ul class="dropdown-menu confirmation-dropdown">
+                        <li>Reuse the most recent checkin?
+                            <button class="lazy-button-confirm btn btn-mini">Yes</button>
+                        </li>
+                    </ul>
+                </div>
+                {{/if}}
             <div class="btn-group">
                 <button class="add-checkin btn btn-mini" title="Create new checkin"><i class="icon-pencil"></i></button>
             </div>

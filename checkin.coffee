@@ -163,6 +163,8 @@ if Meteor.isClient
   Template.teamHeader.alreadyCheckedIn = ->
     latest = Checkins.latest(@_id)
     latest? and Time.occursToday(new Date(latest.createdDate))
+  Template.teamHeader.latestCheckin = ->
+    Checkins.latest(@_id)
   Template.teamHeader.events =
     'click .add-checkin': ->
       Session.set('adding', @_id)
